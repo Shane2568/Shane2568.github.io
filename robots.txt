@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shane2568.github.io/sitemap.xml

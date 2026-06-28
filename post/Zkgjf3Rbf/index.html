@@ -1,0 +1,272 @@
+<html>
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content="Gridea Pro 1.2.2">
+<title>Unity面经 | Gridea Pro</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1782666490">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Unity面经 | Gridea Pro - Atom Feed" href="/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+<meta name="description" content="Lua xlua热更新原理 xlua中c#和lua测是怎么交互的 lua元表面向对象的实现 图形学 判断三角形是否正对摄像机(剔除) 计算摄像机方向和三角形法线方向的夹角(点乘反余弦) 性能 unity 加载某个界面时,有很多小图加载导致卡顿,该怎么处理 图集合并：将多个小图集合并成一个大图集（Texture Atlas），可以减&amp;hellip;">
+<link rel="canonical" href="https://shane2568.github.io/post/Zkgjf3Rbf/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Unity面经","url":"https://shane2568.github.io/post/Zkgjf3Rbf/","description":"Lua xlua热更新原理 xlua中c#和lua测是怎么交互的 lua元表面向对象的实现 图形学 判断三角形是否正对摄像机(剔除) 计算摄像机方向和三角形法线方向的夹角(点乘反余弦) 性能 unity 加载某个界面时,有很多小图加载导致卡顿,该怎么处理 图集合并：将多个小图集合并成一个大图集（Texture Atlas），可以减\u0026hellip;","datePublished":"2024-04-01T23:52:19+08:00","dateModified":"2026-06-29T01:07:25+08:00","author":{"@type":"Person","name":"Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Gridea Pro"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://shane2568.github.io","name":"Gridea Pro","position":1},{"@type":"ListItem","item":"https://shane2568.github.io/post/Zkgjf3Rbf/","name":"Unity面经","position":2}]}</script>
+<meta property="og:title" content="Unity面经">
+<meta property="og:description" content="Lua xlua热更新原理 xlua中c#和lua测是怎么交互的 lua元表面向对象的实现 图形学 判断三角形是否正对摄像机(剔除) 计算摄像机方向和三角形法线方向的夹角(点乘反余弦) 性能 unity 加载某个界面时,有很多小图加载导致卡顿,该怎么处理 图集合并：将多个小图集合并成一个大图集（Texture Atlas），可以减&amp;hellip;">
+<meta property="og:url" content="https://shane2568.github.io/post/Zkgjf3Rbf/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Gridea Pro">
+<meta property="og:image" content="/images/avatar.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://shane2568.github.io/post/Zkgjf3Rbf/">
+<meta name="twitter:title" content="Unity面经">
+<meta name="twitter:description" content="Lua xlua热更新原理 xlua中c#和lua测是怎么交互的 lua元表面向对象的实现 图形学 判断三角形是否正对摄像机(剔除) 计算摄像机方向和三角形法线方向的夹角(点乘反余弦) 性能 unity 加载某个界面时,有很多小图加载导致卡顿,该怎么处理 图集合并：将多个小图集合并成一个大图集（Texture Atlas），可以减&amp;hellip;">
+<meta name="twitter:image" content="/images/avatar.png">
+</head>
+
+<body>
+    <div class="main">
+        <div class="main-content">
+            
+<div class="site-header">
+    <a href="/">
+        <img class="avatar" src="/images/avatar.png?v=1782666490" alt="">
+    </a>
+    <h1 class="site-title">
+        Gridea Pro
+    </h1>
+    <p class="site-description">
+        Welcome to Gridea Pro
+    </p>
+    <div class="menu-container">
+        
+        
+        <a href="/" class="menu">
+            首页
+        </a>
+        
+        
+        
+        <a href="/post" class="menu">
+            博客
+        </a>
+        
+        
+        
+        <a href="/memos" class="menu">
+            闪念
+        </a>
+        
+        
+        
+        <a href="/archives" class="menu">
+            归档
+        </a>
+        
+        
+        
+        <a href="/tags" class="menu">
+            标签
+        </a>
+        
+        
+        
+        <a href="/links" class="menu">
+            友链
+        </a>
+        
+        
+        
+        <a href="/post/about" class="menu">
+            关于
+        </a>
+        
+        
+    </div>
+    <div class="social-container">
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+            <div class="post-detail">
+                <article class="post">
+                    <h2 class="post-title">
+                        Unity面经
+                    </h2>
+                    <div class="post-info">
+                        <span>
+                            2024-04-01
+                        </span>
+                        <span>
+                            3 分钟阅读
+                        </span>
+                        
+                    </div>
+                    
+                    <div class="post-content-wrapper">
+                        <div class="post-content" v-pre>
+                            <h1 id="lua">Lua</h1>
+<p>xlua热更新原理<br />
+xlua中c#和lua测是怎么交互的<br />
+lua元表面向对象的实现</p>
+<h1 id="heading">图形学</h1>
+<h2 id="heading-1">判断三角形是否正对摄像机(剔除)</h2>
+<p>计算摄像机方向和三角形法线方向的夹角(点乘反余弦)</p>
+<h1 id="heading-2">性能</h1>
+<h2 id="unity-">unity 加载某个界面时,有很多小图加载导致卡顿,该怎么处理</h2>
+<ol>
+<li>
+<p><strong>图集合并</strong>：将多个小图集合并成一个大图集（Texture Atlas），可以减少渲染批次和减轻贴图切换的开销，从而提高性能。Unity提供了TexturePacker等工具来帮助你自动进行图集合并。</p>
+</li>
+<li>
+<p><strong>异步加载</strong>：使用异步加载的方式加载小图，可以避免在加载过程中阻塞主线程，从而减少卡顿。你可以使用Unity的协程（Coroutine）或者Async/Await模式来实现异步加载。</p>
+</li>
+<li>
+<p><strong>对象池技术</strong>：使用对象池技术可以在游戏运行时预先创建一定数量的小图对象，并在需要时重复使用，而不是频繁地创建和销毁对象。这样可以减少内存分配和垃圾回收的开销，提高性能。</p>
+</li>
+<li>
+<p><strong>分帧加载</strong>：将加载操作分解成多帧进行，每帧加载一部分小图，可以避免一次性加载过多资源导致的卡顿。你可以在多帧中逐步加载小图，直到全部加载完成。</p>
+</li>
+<li>
+<p><strong>优化资源</strong>：对小图进行压缩和优化，减小其尺寸和内存占用。你可以使用Unity提供的Texture Compression等功能对小图进行优化，以减少加载时的内存开销。</p>
+</li>
+<li>
+<p><strong>懒加载</strong>：只在需要时加载小图，而不是在游戏启动时一次性加载所有资源。这样可以延迟加载开销，并在游戏运行过程中根据需要动态加载资源。</p>
+</li>
+</ol>
+<h2 id="heading-3">逻辑层和表现层的帧数不一致怎么办</h2>
+<p><strong>使用插值来平滑表现层的渲染</strong> : 例如，你可以在渲染时使用上一帧和当前帧之间的时间差来插值物体的位置和旋转，以平滑动画过渡，从而使得在更高的帧率下表现更流畅。</p>
+<h1 id="ai">AI</h1>
+<h2 id="ai-1">场景有很多智能体的情况下如何设置AI</h2>
+<p>行为树更新降频<br />
+LOD<br />
+利用对象池管理AI Agent的创建与销毁</p>
+<h1 id="unity">Unity</h1>
+<h2 id="monobehaviour">monobehaviour更新顺序?</h2>
+<p>Awake——&gt;OnEnable–&gt;Start——&gt;Update——&gt;FixedUpdate——&gt;LateUpdate——&gt;OnGUI——&gt;OnDisable——&gt;OnDestroy</p>
+<h2 id="unityupdate">unity的update有什么问题</h2>
+<h1 id="ui">UI</h1>
+<h2 id="layout-group">layout group里面三个参数是干嘛用的</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Control Child Size</strong></td>
+<td>Whether the Layout Group controls the width and height of its child layout elements.</td>
+</tr>
+<tr>
+<td><strong>Use Child Scale</strong></td>
+<td>Whether the Layout Group considers the scale of its child layout elements when sizing and laying out elements.  <br>  <br><strong>Width</strong> and <strong>Height</strong> correspond to the <strong>Scale &gt; X</strong> and <strong>Scale &gt; Y</strong> values in each child layout element&rsquo;s <a href="https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/class-RectTransform.html">Rect Transform</a> component.  <br>  <br>You cannot animate the Scale values using the <a href="https://docs.unity3d.com/Manual/class-AnimatorController.html">Animator Controller</a></td>
+</tr>
+<tr>
+<td><strong>Child Force Expand</strong></td>
+<td>Whether to force the child layout elements to expand to fill additional available space.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="recttransform">如何获取一个RectTransform的大小</h2>
+<p>1：直接获取sizeDelta属性值，其中X和Y可以对应理解成width和height。sizeDelta的具体含义：若anchors是一个点的话则代表宽高，否则为到锚点的距离</p>
+<p>2：rect.size的属性值，这里不受anchors的影响</p>
+<h2 id="heading-4">背包循环列表的实现,不同大小怎么处理</h2>
+<p><a href="https://www.zhihu.com/column/c_1684515818367504385">https://www.zhihu.com/column/c_1684515818367504385</a></p>
+<h1 id="c">C#</h1>
+<h2 id="heading-5">谈谈值类型和引用类型</h2>
+<h2 id="dictionarytkey-tvaluekey">使用Dictionary&lt;Tkey, TValue&gt;时,如果key是值类型有没有什么要注意的</h2>
+<p>如果是系统的内置int,long这种无所谓, 但是如果key是自定义的struct,需要重写GetHashCode()etHashCode()方法！主要原因是一定要确保不同Key的HashCode绝不重复（这里的“绝不”是针对所有可能出现的Key值的范围而言）</p>
+
+                        </div>
+                        <div class="toc-container">
+                            
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            
+            <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="/post/h6rJOxXmw/">
+                    <h3 class="post-title">
+                        Leetcode算法题
+                    </h3>
+                </a>
+            </div>
+            
+
+            
+
+            
+<div class="site-footer">
+    Powered by Gridea Pro
+    <a class="rss" href="/atom.xml" target="_blank">
+        <i class="ri-rss-line"></i> RSS
+    </a>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+        hljs.initHighlightingOnLoad()
+
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+        
+        
+        
+        
+        
+        
+        
+        
+
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+
+    </script>
+<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: inotes v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+</body>
+
+</html>
